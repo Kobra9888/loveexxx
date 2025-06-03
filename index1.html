@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meri_Cutte - Your Private Connection</title>
+    <link rel="icon" type="image/png" href="/path/to/your/favicon.png"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset & Body Styles */
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            background-color: #000;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            line-height: 1.6; /* Улучшает читаемость текста */
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+            /* background-color: #000; /* Добавим фолбэк цвет на случай, если видео не загрузится */
+        }
+
+        /* ИСПРАВЛЕНИЕ ВИДЕО: Переименован класс и применены правильные стили */
+        .hero-video-bg { 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Важно: чтобы видео занимало всю область и обрезалось при необходимости */
+            z-index: -1;
+            filter: brightness(0.6) contrast(1.2); /* Darken and enhance contrast */
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Убрал z-index: -1;, так как .hero-video-bg уже с -1, и overlay должен быть поверх него */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 0; /* Обертка должна быть выше видео, но ниже контента */
+        }
+
+        .hero-content {
+            z-index: 1; /* Контент всегда выше */
+            max-width: 900px;
+            animation: fadeIn 2s ease-out;
+            padding: 0 20px; /* Добавил горизонтальный отступ для маленьких экранов */
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+
+        .hero-content h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5em;
+            font-weight: 400;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #E03A8C; /* Vibrant pink/magenta */
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Добавил box-shadow в transition */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            white-space: nowrap; /* Предотвращает перенос текста кнопки на новую строку */
+        }
+
+        .cta-button:hover {
+            background-color: #FF5C9D; /* Lighter pink on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); /* Усилить тень при наведении */
+        }
+        
+        /* Добавил стиль для кнопок в футере, чтобы они были отдельными */
+        .footer .cta-button {
+            margin-top: 20px; /* Отступ сверху */
+            margin-bottom: 20px; /* Отступ снизу */
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 80px 20px;
+            text-align: center;
+            background-color: #1a1a1a;
+            border-top: 1px solid #333;
+        }
+
+        .content-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            color: #E03A8C;
+        }
+
+        .content-section p {
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        /* ИСПРАВЛЕНИЕ: Класс .image-gallery используется для сетки изображений, а не для видео в hero-section */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 10px; /* Добавил горизонтальный отступ для галереи */
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 350px; /* Fixed height for consistency */
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.8); /* Slightly darken images */
+            transition: filter 0.3s ease; /* Добавил переход для фильтра */
+        }
+
+        .gallery-item:hover img {
+            filter: brightness(1); /* Светлее при наведении */
+        }
+
+        /* ИСПРАВЛЕНИЕ: Изменен класс с .collection-image на .gallery-item-overlay, чтобы соответствовать CSS */
+        .gallery-item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-item-overlay { /* Исправлен селектор */
+            opacity: 1;
+        }
+
+        .gallery-item-overlay span {
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+        }
+
+        /* Social Proof Section */
+        .social-proof-section {
+            background-color: #0d0d0d;
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        .social-proof-section h2 {
+            color: #E03A8C;
+            font-size: 2.2em;
+            margin-bottom: 40px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 10px; /* Добавил горизонтальный отступ для отзывов */
+        }
+
+        .testimonial-item {
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            text-align: left;
+            border: 1px solid #333;
+            display: flex; /* Для выравнивания текста и автора */
+            flex-direction: column;
+            justify-content: space-between; /* Чтобы автор был внизу */
+        }
+
+        .testimonial-item p {
+            font-style: italic;
+            color: #bbb;
+            margin-bottom: 15px;
+            font-size: 1em;
+            flex-grow: 1; /* Чтобы параграф занимал доступное пространство */
+        }
+
+        /* ИСПРАВЛЕНИЕ: Удален лишний класс .author из HTML, чтобы селектор работал */
+        .testimonial-item .author { /* Селектор изменен для правильного применения стиля */
+            font-weight: 700;
+            color: #E03A8C;
+            font-size: 0.95em;
+            margin-top: 10px; /* Отступ от текста отзыва */
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #000;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #888;
+            border-top: 1px solid #333;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+            .hero-content h2 {
+                font-size: 1.2em;
+            }
+            .cta-button {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+            .content-section, .social-proof-section {
+                padding: 50px 15px;
+            }
+            .content-section h2 {
+                font-size: 2em;
+            }
+            .image-gallery {
+                grid-template-columns: 1fr; /* Single column on small screens */
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr; /* Single column on small screens */
+            }
+        }
+
+        /* Дополнительные медиа-запросы для более тонкой адаптации */
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 1.8em;
+            }
+            .hero-content h2 {
+                font-size: 1em;
+            }
+            .cta-button {
+                padding: 10px 25px;
+                font-size: 0.9em;
+            }
+            .content-section h2 {
+                font-size: 1.8em;
+            }
+            .social-proof-section h2 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero-section">
+        <video class="hero-video-bg" autoplay loop muted playsinline>
+            <source src="image/hero_video.mp4" type="video/mp4">
+            <source src="image/hero_video.webm" type="video/webm">
+            <source src="image/hero_video.ogg" type="video/ogg">
+          
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Step into My World: Meri_Cutte Awaits Your Private Connection.</h1>
+            <h2>Experience Unfiltered Sensuality & Exclusive Moments – Only on Stripchat.</h2>
+            <a href="https://stripchat.com/Meri_Cutte/follow-me" class="cta-button" target="_blank" rel="noopener noreferrer">🔥 Watch Live Now! 🔥</a>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>Beyond the Screen: Your Live Experience with Meri_Cutte</h2>
+        <p>Discover a realm where every moment is authentic and every interaction is personal. Meri invites you to an exclusive journey of real-time connection, spontaneous moments, and content crafted just for you. Forget the ordinary – embrace the extraordinary.</p>
+        <p>Her live shows are a unique blend of artistry and intimacy, designed to captivate and engage. Get ready for an experience that transcends the screen and brings you closer than ever before.</p>
+        
+        <div class="image-gallery">
+            <div class="gallery-item">
+                <img src="image/1.jpg" alt="Exclusive Glimpse of Meri_Cutte"> <div class="gallery-item-overlay"><span>Exclusive Glimpse</span></div> </div>
+            <div class="gallery-item">
+                <img src="image/2.jpg" alt="Intimate Moments with Meri_Cutte">
+                <div class="gallery-item-overlay"><span>Intimate Moments</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="image/3.jpg" alt="Unfiltered Access to Meri_Cutte's World">
+                <div class="gallery-item-overlay"><span>Unfiltered Access</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="image/4.jpg" alt="Sensual Artistry by Meri_Cutte">
+                <div class="gallery-item-overlay"><span>Sensual Artistry</span></div>
+            </div>
+        </div>
+        <a href="https://stripchat.com/Meri_Cutte/follow-me" class="cta-button" target="_blank" rel="noopener noreferrer">🔓 Unlock Live Access Now!</a>
+    </section>
+
+    <section class="social-proof-section">
+        <h2>Voices of Admiration:</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-item">
+                <p>"Her live shows are incredible, truly interactive! Never seen anything like it, she's amazing live!"</p>
+                <div class="author">- A Loyal Fan</div> </div>
+            <div class="testimonial-item">
+                <p>"The most intimate connection I've ever experienced online. Every moment is captivating and unique."</p>
+                <div class="author">- Dedicated Follower</div>
+            </div>
+            <div class="testimonial-item">
+                <p>"Absolutely stunning and so engaging. This is the future of exclusive content. Highly recommend!"</p>
+                <div class="author">- New Patron</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <a href="https://stripchat.com/Meri_Cutte/follow-me" class="cta-button" target="_blank" rel="noopener noreferrer">👇 Don't Miss Out: Join Meri_Cutte's Live Show Today! 👇</a>
+        <p>18+ Disclaimer. All content is for mature audiences only.</p>
+        <p><a href="#" style="color: #888; text-decoration: none;" target="_blank" rel="noopener noreferrer">Privacy Policy</a> | <a href="#" style="color: #888; text-decoration: none;" target="_blank" rel="noopener noreferrer">Terms of Service</a></p>
+    </footer>
+
+    <script>
+        // PASTE YOUR REDTRACK SCRIPT HERE
+        // Example: var _r = {... };
+    </script>
+</body>
+</html>
